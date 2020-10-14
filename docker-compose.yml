@@ -2,7 +2,7 @@ version: "3"
 services:
   admin:
     image: vintentas/admin-server
-    restart: always
+    restart: on-failure
     ports:
       - "9003:9003"
 
@@ -15,13 +15,16 @@ services:
       - admin
       - mongo
       - mongo-express
+    env_file:
+      - .env
 
   mongo:
     image: mongo
     restart: on-failure
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
 
   mongo-express:
     image: mongo-express
@@ -31,3 +34,5 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    env_file:
+      - .env
